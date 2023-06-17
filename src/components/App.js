@@ -3,7 +3,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import ImagePopup from './ImagePopup';
-import React, { useEffect } from 'react';
+import React from 'react';
 import api from '../utils/Api';
 import * as auth from '../utils/Auth';
 import CurrentUserContext from '../contexts/CurrentUserContext';
@@ -121,7 +121,7 @@ function App() {
       }
     })
     .then(() => {
-      handleTokenCheck();
+      handleSuccessLogin(email);
     })
     .catch((err) => {
       setIsSuccess(false);
@@ -136,15 +136,19 @@ function App() {
       auth.checkToken(jwt)
       .then((data) => {
         if (data) {
-          setLoggedIn(true);
-          setEmail(data.data.email);
-          navigate("/", { replace: true });
+          handleSuccessLogin(data.data.email);
         }
       })
       .catch((err) => {
         console.log(err)
       })
     }
+  }
+
+  function handleSuccessLogin(email) {
+    setLoggedIn(true);
+    setEmail(email);
+    navigate("/", { replace: true });
   }
 
   function handleSignOut() {
